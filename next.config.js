@@ -1,15 +1,13 @@
 // next.config.js
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'export',
   reactStrictMode: true,
   swcMinify: true,
   images: {
     domains: ['images.unsplash.com', 'via.placeholder.com'],
-    unoptimized: true, // Required for static export
+    unoptimized: process.env.NODE_ENV === 'production',
   },
-  basePath: '',
-  trailingSlash: true, // Recommended for static site generation
+  // Make sure rewrites or redirects aren't interfering with API routes
 };
 
 module.exports = nextConfig;

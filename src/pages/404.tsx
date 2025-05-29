@@ -10,6 +10,7 @@ export default function Custom404() {
       <SEO 
         title="404 - Page Not Found | ESnapup" 
         description="The page you're looking for doesn't exist."
+        keywords={['404', 'page not found', 'error', 'ESnapup']}
       />
       <Container maxWidth="md">
         <Box

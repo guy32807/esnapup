@@ -1,174 +1,156 @@
 import React from 'react';
-import { Box, Container, Grid, Typography, Link as MuiLink, IconButton, Stack, Divider, useTheme, useMediaQuery } from '@mui/material';
+import { 
+  Box, Container, Grid, Typography, Link as MuiLink, 
+  IconButton, Divider, Stack, useTheme 
+} from '@mui/material';
 import Link from 'next/link';
-import FacebookIcon from '@mui/icons-material/Facebook';
-import TwitterIcon from '@mui/icons-material/Twitter';
-import LinkedInIcon from '@mui/icons-material/LinkedIn';
-import InstagramIcon from '@mui/icons-material/Instagram';
-import GitHubIcon from '@mui/icons-material/GitHub';
 import EmailIcon from '@mui/icons-material/Email';
 import PhoneIcon from '@mui/icons-material/Phone';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
+import GitHubIcon from '@mui/icons-material/GitHub';
+import LinkedInIcon from '@mui/icons-material/LinkedIn';
+import TwitterIcon from '@mui/icons-material/Twitter';
+import { footerLinks } from '@/data/navigation';
+import Logo from './Logo';
 
-const FooterLink = ({ href, children }: { href: string, children: React.ReactNode }) => (
-  <Link href={href} passHref>
-    <MuiLink
-      color="inherit"
-      sx={{
-        display: 'block',
-        mb: 1.5,
-        fontSize: '0.9rem',
-        '&:hover': {
-          color: 'primary.main',
-          textDecoration: 'none'
-        }
-      }}
-    >
-      {children}
-    </MuiLink>
-  </Link>
-);
-
-const Footer: React.FC = () => {
+const Footer = () => {
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  
   const currentYear = new Date().getFullYear();
   
   return (
     <Box 
       component="footer" 
-      sx={{ 
+      sx={{
         bgcolor: 'background.paper',
         borderTop: '1px solid',
         borderColor: 'divider',
+        py: 6,
         mt: 'auto',
-        py: { xs: 6, md: 8 }
       }}
     >
       <Container maxWidth="lg">
         <Grid container spacing={4}>
-          <Grid item xs={12} sm={6} md={3}>
-            <Box sx={{ mb: { xs: 3, md: 0 } }}>
-              <Typography variant="h6" color="text.primary" gutterBottom fontWeight={600}>
-                ESnapup
-              </Typography>
-              <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                Transforming ideas into powerful digital solutions with cutting-edge technology and expertise.
-              </Typography>
-              <Stack direction="row" spacing={1}>
-                <IconButton 
-                  href="https://facebook.com/esnapup" 
-                  target="_blank"
-                  aria-label="Facebook"
-                  size="small"
-                  sx={{ color: '#1877F2' }}
-                >
-                  <FacebookIcon />
-                </IconButton>
-                <IconButton 
-                  href="https://twitter.com/esnapup" 
-                  target="_blank"
-                  aria-label="Twitter"
-                  size="small"
-                  sx={{ color: '#1DA1F2' }}
-                >
-                  <TwitterIcon />
-                </IconButton>
-                <IconButton 
-                  href="https://linkedin.com/company/esnapup" 
-                  target="_blank"
-                  aria-label="LinkedIn"
-                  size="small"
-                  sx={{ color: '#0A66C2' }}
-                >
-                  <LinkedInIcon />
-                </IconButton>
-                <IconButton 
-                  href="https://instagram.com/esnapup" 
-                  target="_blank"
-                  aria-label="Instagram"
-                  size="small"
-                  sx={{ color: '#E4405F' }}
-                >
-                  <InstagramIcon />
-                </IconButton>
-                <IconButton 
-                  href="https://github.com/esnapup" 
-                  target="_blank"
-                  aria-label="GitHub"
-                  size="small"
-                  sx={{ color: '#171515' }}
-                >
-                  <GitHubIcon />
-                </IconButton>
-              </Stack>
+          {/* Logo & Company Info */}
+          <Grid item xs={12} md={4}>
+            <Box sx={{ mb: 2 }}>
+              <Logo />
+            </Box>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+              Custom software development solutions that transform your business and drive innovation.
+            </Typography>
+            
+            {/* Contact Info */}
+            <Stack spacing={1} sx={{ mt: 3 }}>
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <EmailIcon fontSize="small" sx={{ mr: 1, color: 'primary.main' }} />
+                <MuiLink href="mailto:info@esnapup.com" color="inherit" underline="hover" variant="body2">
+                  info@esnapup.com
+                </MuiLink>
+              </Box>
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <EmailIcon fontSize="small" sx={{ mr: 1, color: 'primary.main' }} />
+                <MuiLink href="mailto:adubuisson@comcast.net" color="inherit" underline="hover" variant="body2">
+                  adubuisson@comcast.net
+                </MuiLink>
+              </Box>
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <PhoneIcon fontSize="small" sx={{ mr: 1, color: 'primary.main' }} />
+                <MuiLink href="tel:+13522985645" color="inherit" underline="hover" variant="body2">
+                  (352) 298-5645
+                </MuiLink>
+              </Box>
+              <Box sx={{ display: 'flex', alignItems: 'flex-start' }}>
+                <LocationOnIcon fontSize="small" sx={{ mr: 1, mt: 0.5, color: 'primary.main' }} />
+                <Typography variant="body2" color="text.secondary">
+                  1626 West Orange Blossom Trail # 1046<br />
+                  Apopka, FL 32712
+                </Typography>
+              </Box>
+            </Stack>
+          </Grid>
+          
+          {/* Quick Links */}
+          <Grid item xs={12} sm={6} md={4}>
+            <Typography variant="h6" component="h3" gutterBottom fontWeight="medium" color="text.primary">
+              Quick Links
+            </Typography>
+            <Box component="ul" sx={{ listStyle: 'none', p: 0, m: 0 }}>
+              {footerLinks.map((link, index) => (
+                <Box component="li" key={index} sx={{ mb: 1 }}>
+                  <Link href={link.path} passHref legacyBehavior>
+                    <MuiLink 
+                      color="text.secondary" 
+                      underline="hover" 
+                      sx={{ display: 'inline-block', '&:hover': { color: 'primary.main' } }}
+                    >
+                      {link.label}
+                    </MuiLink>
+                  </Link>
+                </Box>
+              ))}
             </Box>
           </Grid>
           
-          <Grid item xs={12} sm={6} md={3}>
-            <Typography variant="subtitle1" color="text.primary" gutterBottom fontWeight={600}>
-              Services
+          {/* Newsletter */}
+          <Grid item xs={12} sm={6} md={4}>
+            <Typography variant="h6" component="h3" gutterBottom fontWeight="medium" color="text.primary">
+              Connect With Us
             </Typography>
-            <FooterLink href="/services/web-development">Web Development</FooterLink>
-            <FooterLink href="/services/mobile-apps">Mobile Applications</FooterLink>
-            <FooterLink href="/services/cloud-solutions">Cloud Solutions</FooterLink>
-            <FooterLink href="/services/ai-integration">AI Integration</FooterLink>
-            <FooterLink href="/services/consulting">IT Consulting</FooterLink>
-          </Grid>
-          
-          <Grid item xs={12} sm={6} md={3}>
-            <Typography variant="subtitle1" color="text.primary" gutterBottom fontWeight={600}>
-              Company
+            <Typography variant="body2" color="text.secondary" paragraph>
+              Follow us on social media for updates, tech insights, and more.
             </Typography>
-            <FooterLink href="/about">About Us</FooterLink>
-            <FooterLink href="/portfolio">Our Work</FooterLink>
-            <FooterLink href="/team">Our Team</FooterLink>
-            <FooterLink href="/careers">Careers</FooterLink>
-            <FooterLink href="/blog">Blog</FooterLink>
-          </Grid>
-          
-          <Grid item xs={12} sm={6} md={3}>
-            <Typography variant="subtitle1" color="text.primary" gutterBottom fontWeight={600}>
-              Contact Us
-            </Typography>
-            <Box sx={{ mb: 2 }}>
-              <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 1 }}>
-                <EmailIcon fontSize="small" color="primary" />
-                <MuiLink href="mailto:info@esnapup.com" color="text.secondary">
-                  info@esnapup.com
-                </MuiLink>
-              </Stack>
-              <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 1 }}>
-                <PhoneIcon fontSize="small" color="primary" />
-                <Typography variant="body2" color="text.secondary">
-                  +1 (555) 123-4567
-                </Typography>
-              </Stack>
-              <Stack direction="row" spacing={1} alignItems="flex-start" sx={{ mb: 1 }}>
-                <LocationOnIcon fontSize="small" color="primary" sx={{ mt: 0.3 }} />
-                <Typography variant="body2" color="text.secondary">
-                  123 Tech Plaza, Suite 400<br />
-                  San Francisco, CA 94105
-                </Typography>
-              </Stack>
+            <Box sx={{ display: 'flex', gap: 1 }}>
+              <IconButton 
+                aria-label="GitHub" 
+                component="a" 
+                href="https://github.com/guy32807/esnapup" 
+                target="_blank" 
+                rel="noopener"
+                sx={{ color: 'text.secondary' }}
+              >
+                <GitHubIcon />
+              </IconButton>
+              <IconButton 
+                aria-label="LinkedIn" 
+                component="a" 
+                href="https://linkedin.com/in/auguste-dubuisson" 
+                target="_blank" 
+                rel="noopener"
+                sx={{ color: 'text.secondary' }}
+              >
+                <LinkedInIcon />
+              </IconButton>
+              <IconButton 
+                aria-label="Twitter" 
+                component="a" 
+                href="https://twitter.com/esnapup" 
+                target="_blank" 
+                rel="noopener"
+                sx={{ color: 'text.secondary' }}
+              >
+                <TwitterIcon />
+              </IconButton>
             </Box>
           </Grid>
         </Grid>
         
         <Divider sx={{ my: 4 }} />
         
-        <Box sx={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', justifyContent: 'space-between', alignItems: isMobile ? 'center' : 'flex-start' }}>
-          <Typography variant="body2" color="text.secondary" align={isMobile ? "center" : "left"}>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap' }}>
+          <Typography variant="body2" color="text.secondary">
             © {currentYear} ESnapup. All rights reserved.
           </Typography>
-          
-          <Box sx={{ display: 'flex', mt: isMobile ? 2 : 0 }}>
-            <FooterLink href="/privacy">Privacy Policy</FooterLink>
-            <Typography variant="body2" color="text.secondary" sx={{ mx: 1 }}>•</Typography>
-            <FooterLink href="/terms">Terms of Service</FooterLink>
-            <Typography variant="body2" color="text.secondary" sx={{ mx: 1 }}>•</Typography>
-            <FooterLink href="/sitemap">Sitemap</FooterLink>
+          <Box>
+            <Link href="/privacy" passHref legacyBehavior>
+              <MuiLink color="text.secondary" underline="hover" sx={{ mr: 2 }} variant="body2">
+                Privacy Policy
+              </MuiLink>
+            </Link>
+            <Link href="/terms" passHref legacyBehavior>
+              <MuiLink color="text.secondary" underline="hover" variant="body2">
+                Terms of Service
+              </MuiLink>
+            </Link>
           </Box>
         </Box>
       </Container>

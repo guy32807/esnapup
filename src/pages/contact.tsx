@@ -117,7 +117,13 @@ const Contact = () => {
     setAiResponse(null);
     
     try {
-      const response = await fetch('/api/contact', {
+      // First, check if we're in development or production
+      const baseUrl = process.env.NODE_ENV === 'production' 
+        ? 'https://www.esnapup.com' 
+        : '';
+      
+      // Make sure we're using the correct path
+      const response = await fetch(`${baseUrl}/api/contact`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -125,14 +131,20 @@ const Contact = () => {
         body: JSON.stringify(formState),
       });
       
+      // Handle non-JSON responses
+      const contentType = response.headers.get("content-type");
+      if (!contentType || !contentType.includes("application/json")) {
+        throw new Error(`Received non-JSON response with status ${response.status}`);
+      }
+      
       const data = await response.json();
       
       if (!response.ok) {
-        throw new Error(data.message || 'Something went wrong');
+        throw new Error(data.message || `Server error: ${response.status}`);
       }
       
       // Get OpenAI response
-      const aiRes = await fetch('/api/ai-response', {
+      const aiRes = await fetch(`${baseUrl}/api/ai-response`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -144,10 +156,13 @@ const Contact = () => {
         }),
       });
       
-      const aiData = await aiRes.json();
-      
+      // Handle AI response with proper error checking
       if (aiRes.ok) {
-        setAiResponse(aiData.response);
+        const aiContentType = aiRes.headers.get("content-type");
+        if (aiContentType && aiContentType.includes("application/json")) {
+          const aiData = await aiRes.json();
+          setAiResponse(aiData.response);
+        }
       }
       
       setSubmitted(true);
@@ -158,6 +173,7 @@ const Contact = () => {
         message: ''
       });
     } catch (err: any) {
+      console.error("Form submission error:", err);
       setError(err.message || 'An error occurred while submitting the form. Please try again.');
     } finally {
       setSubmitting(false);
@@ -179,18 +195,25 @@ const Contact = () => {
           "name": "ESnapup Contact Page",
           "description": "Contact ESnapup for software development services",
           "url": "https://www.esnapup.com/contact",
-          "contactPoint": {
-            "@type": "ContactPoint",
-            "telephone": "+1-555-123-4567",
-            "email": "info@esnapup.com",
-            "contactType": "customer service"
-          },
+          "contactPoint": [
+            {
+              "@type": "ContactPoint",
+              "telephone": "+13522985645",
+              "email": "info@esnapup.com",
+              "contactType": "customer service"
+            },
+            {
+              "@type": "ContactPoint",
+              "email": "adubuisson@comcast.net",
+              "contactType": "customer service"
+            }
+          ],
           "address": {
             "@type": "PostalAddress",
-            "streetAddress": "123 Tech Plaza, Suite 400",
-            "addressLocality": "San Francisco",
-            "addressRegion": "CA",
-            "postalCode": "94105",
+            "streetAddress": "1626 West Orange Blossom Trail # 1046",
+            "addressLocality": "Apopka",
+            "addressRegion": "FL",
+            "postalCode": "32712",
             "addressCountry": "US"
           }
         }}
@@ -243,6 +266,9 @@ const Contact = () => {
               <Typography variant="body1" sx={{ ml: 5 }}>
                 info@esnapup.com
               </Typography>
+              <Typography variant="body1" sx={{ ml: 5 }}>
+                adubuisson@comcast.net
+              </Typography>
             </Box>
             
             <Box sx={{ mb: 4 }}>
@@ -253,7 +279,7 @@ const Contact = () => {
                 </Typography>
               </Box>
               <Typography variant="body1" sx={{ ml: 5 }}>
-                +1 (555) 123-4567
+                (352) 298-5645
               </Typography>
             </Box>
             
@@ -265,8 +291,8 @@ const Contact = () => {
                 </Typography>
               </Box>
               <Typography variant="body1" sx={{ ml: 5 }}>
-                123 Tech Plaza, Suite 400<br />
-                San Francisco, CA 94105<br />
+                1626 West Orange Blossom Trail # 1046<br />
+                Apopka, FL 32712<br />
                 United States
               </Typography>
             </Box>
